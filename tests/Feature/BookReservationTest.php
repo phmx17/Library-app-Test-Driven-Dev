@@ -46,4 +46,25 @@ class ExampleTest extends TestCase
       $response->assertSessionHasErrors(['author']);
     }
 
+    /** @test */
+    public function a_book_needs_to_be_updated()
+    {
+      $this->withoutExceptionHandling();
+      $this->post('/books', [
+        'title' => 'kewl book',
+        'author' => 'Slim Yelow'
+      ]);
+
+      $book = Book::first();
+
+      $this->patch('/books/' . $book->id,[
+        'title' => 'patched title',
+        'author' => 'patched author'
+      ]);
+      // check the DB for the update
+      $this->assertEquals('patched title', Book::first()->title);
+      $this->assertEquals('patched author', Book::first()->author);
+    }
+
+
 }
