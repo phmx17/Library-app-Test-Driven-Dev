@@ -15,7 +15,8 @@ class BooksController extends Controller
     // ]);
     // $validated = $this->validateRequest(); // no need to pass $request
 
-    Book::create($this->validateRequest()); // refactor by inlining the above process
+    $book = Book::create($this->validateRequest()); // refactor by inlining the above process
+    return redirect('/books/' . $book->id);
   }
 
   public function update(Request $request, Book $book)
@@ -25,9 +26,20 @@ class BooksController extends Controller
     // using an instance of book that got passed with route-model-binding instead of using the id and ->where()
     $book->update($this->validateRequest()); // modern method
     // Book::where('id', $book->id)->update($validated); // traditional method
-
-
+    return redirect('/books/' . $book->id);
   }
+
+  public function destroy(Book $book)
+  {
+    // $validated = $this->validateRequest(); // no need to pass $request; refactor by inlining below
+
+    // using an instance of book that got passed with route-model-binding instead of using the id and ->where()
+    $book->delete(); // modern method
+    // Book::where('id', $book->id)->update($validated); // traditional method
+    return redirect('/books');
+  }
+
+
   /**
    * return @mixed
    */
